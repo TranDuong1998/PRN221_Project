@@ -1,97 +1,72 @@
-﻿using GalaSoft.MvvmLight.Command;
-using Microsoft.VisualBasic.FileIO;
+﻿using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using OfficeOpenXml;
-using OfficeOpenXml.Table;
-using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
-
-namespace PRN221_Project.Services
+namespace PRN221_Project.ViewModels
 {
-    public class ReadFile : INotifyPropertyChanged
+    /// <summary>
+    /// Interaction logic for ImportData.xaml
+    /// </summary>
+    public partial class ImportData : Window
     {
-        RelayCommand importCommand;
-        RelayCommand readCommand;
+        public List<string> listData = new List<string>();
 
-        private string filePath;
-
-        public string FilePath
+        public ImportData()
         {
-            get { return filePath; }
-            set
-            {
-                if (value != filePath)
-                {
-                    filePath = value;
-                    OnPropertyChanged();
-                }
-            }
+            InitializeComponent();
         }
 
-        public RelayCommand ImportFileCommand { get => importCommand; set => importCommand = value; }
-
-        public RelayCommand ReadFileCommand { get => readCommand; set => readCommand = value; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public ReadFile()
-        {
-            importCommand = new RelayCommand(ImportFile);
-            readCommand = new RelayCommand(ReadDataFromFile);
-        }
-
-        void ImportFile()
+        private void btnChooseFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Excel | *.xlsx, *.xls |CSV | *.csv |JSON | *.json";
 
             if (openFileDialog.ShowDialog() == true)
             {
-                FilePath = openFileDialog.FileName;
+                txtFileName.Text = openFileDialog.FileName;
             }
         }
 
-        void ReadDataFromFile()
+        private void btnImport_Click(object sender, RoutedEventArgs e)
         {
-            if (FilePath == null)
+            if (txtFileName.Text == null)
             {
                 MessageBox.Show("Please choose file", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (FilePath.Contains(".xlsx") || FilePath.Contains(".xls"))
+            if (txtFileName.Text.Contains(".xlsx") || txtFileName.Text.Contains(".xls"))
             {
-                ReadExcelFile(FilePath);
+                ReadExcelFile(txtFileName.Text);
             }
-            else if (FilePath.Contains(".json"))
+            else if (txtFileName.Text.Contains(".json"))
             {
-                ReadJsonFile(FilePath);
+                ReadJsonFile(txtFileName.Text);
             }
-            else if (FilePath.Contains(".csv"))
+            else if (txtFileName.Text.Contains(".csv"))
             {
-                ReadCsvFile(FilePath);
+                ReadCsvFile(txtFileName.Text);
             }
             else
             {
                 MessageBox.Show("Please choose file Excel \".xlsx\" | \".xls\" |JSON \".json\" | CSV \".csv\"", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        
         public void ReadExcelFile(string filePath)
         {
             try
@@ -149,6 +124,4 @@ namespace PRN221_Project.Services
             }
         }
     }
-
-   
 }
