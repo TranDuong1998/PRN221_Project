@@ -31,7 +31,7 @@ create table Teachers
 (
 	TeacherId int identity(1,1),
 	AccountId int,
-	TeachersCode int,
+	TeachersCode varchar(50),
 	FullName nvarchar(100) ,
 	Address nvarchar(200),
 	Phone  varchar(20),
@@ -59,7 +59,8 @@ create table TimeSlot
 (
 	TimeSlotId int identity(1,1),
 	StartTime datetime,
-	EndTime datetime
+	EndTime datetime,
+	Description varchar(50)
 
 	constraint pk_TimeSlot primary key (TimeSlotId)
 )
@@ -81,10 +82,13 @@ create table WeeklyTimeTable
 	Id int identity(1,1),
 	RoomsId int,
 	TeachersId int,
+	CourseId int,
 	Description nvarchar(255),
 
-	constraint pk_WeeklyTimeTable primary key (Id)
-
+	constraint pk_WeeklyTimeTable primary key (Id),
+	constraint fk_WeeklyTimeTableTeachers foreign key (TeachersId) references Teachers (TeacherId),
+	constraint fk_WeeklyTimeTableRooms foreign key (RoomsId) references Rooms (RoomsId),
+	constraint fk_WeeklyTimeTableCourse foreign key (CourseId) references Courses (CourseId)
 )
 go
 
@@ -97,11 +101,11 @@ values			('Basic Cross-Platform Application Programming With .NET', 'PRN211'),
 				('Mobile Programming', 'PRM392'),
 				('SW Architecture and Design', 'SWD392')
 
-insert into TimeSlot(StartTime, EndTime)
-values			('07:30:00', '09:50:00'),
-				('10:00:00', '12:20:00'),
-				('12:50:00', '15:10:00'),
-				('15:20:00', '17:40:00')
+insert into TimeSlot(StartTime, EndTime, Description)
+values			('07:30:00', '09:50:00', 'Slot 1'),
+				('10:00:00', '12:20:00', 'Slot 2'),
+				('12:50:00', '15:10:00', 'Slot 3'),
+				('15:20:00', '17:40:00', 'Slot 4')
 
 insert into Teachers (AccountId, FullName, TeachersCode)
 values				 (2,'Tran Van Duong','DuongTV98')
