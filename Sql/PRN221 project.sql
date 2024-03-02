@@ -1,5 +1,11 @@
-create database PRN211_project
-go
+if exists (SELECT name FROM master.dbo.sysdatabases WHERE name = 'PRN211_project')
+begin
+	drop DATABASE PRN211_project
+end
+else
+begin
+	create database PRN211_project
+end
 
 use PRN211_project
 go
@@ -42,15 +48,27 @@ create table Teachers
 )
 go
 
+create table Classs
+(
+	ClassId int identity(1,1),
+	ClassName varchar(50),
+	Description nvarchar(255)
+
+	constraint pk_Classs primary key (ClassId)
+)
+go
+
 create table TeacherDetails
 (
 	Id int identity(1,1),
 	TeacherId int,
-	CourseId int
+	CourseId int,
+	ClassId int
 
 	constraint pk_TeacherDetails primary key (Id),
 	constraint fk_TeacherDetailCourse foreign key (CourseId) references Courses (CourseId),
-	constraint fk_TeacherDetailTeacher foreign key (TeacherId) references Teachers (TeacherId)
+	constraint fk_TeacherDetailTeacher foreign key (TeacherId) references Teachers (TeacherId),
+	constraint fk_TeacherDetailClass foreign key (ClassId) references Classs (ClassId),
 
 )
 go
@@ -70,10 +88,9 @@ create table Rooms
 (
 	RoomsId int identity(1,1),
 	RoomsName nvarchar(50),
-	TimeSlotId int
+	Description nvarchar(255)
 
-	constraint pk_Rooms primary key (RoomsId),
-	constraint fk_RoomsTime foreign key (TimeSlotId) references TimeSlot (TimeSlotId)
+	constraint pk_Rooms primary key (RoomsId)
 )
 go
 
@@ -83,12 +100,17 @@ create table WeeklyTimeTable
 	RoomsId int,
 	TeachersId int,
 	CourseId int,
+	ClassId int,
+	TimeSlotId int,
+	LearnDate date,
 	Description nvarchar(255),
 
 	constraint pk_WeeklyTimeTable primary key (Id),
 	constraint fk_WeeklyTimeTableTeachers foreign key (TeachersId) references Teachers (TeacherId),
 	constraint fk_WeeklyTimeTableRooms foreign key (RoomsId) references Rooms (RoomsId),
-	constraint fk_WeeklyTimeTableCourse foreign key (CourseId) references Courses (CourseId)
+	constraint fk_WeeklyTimeTableCourse foreign key (CourseId) references Courses (CourseId),
+	constraint fk_WeeklyTimeTableClass foreign key (ClassId) references Classs (ClassId),
+	constraint fk_WeeklyTimeTableTime foreign key (TimeSlotId) references TimeSlot (TimeSlotId)
 )
 go
 
@@ -109,3 +131,11 @@ values			('07:30:00', '09:50:00', 'Slot 1'),
 
 insert into Teachers (AccountId, FullName, TeachersCode)
 values				 (2,'Tran Van Duong','DuongTV98')
+
+insert into Rooms (RoomsName)
+values	('DC201'),('DC202'),('DC203'),('DC204'),('D205'),
+		('D206'),('D207'),('D208'),('D209'),('D210')
+
+insert into Classs	(ClassName)
+values	('SE1610'),('SE1611'),('SE1612'),('SE1613'),('SE1614'),
+		('JD1610'),('JD1611'),('JD1612'),('JD1613'),('JD1614')

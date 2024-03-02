@@ -5,7 +5,7 @@
 # Thư mục và tệp build và compile
 /bin/
 /obj/
-
+/lib/
 # Thư mục .vs
 .vs/
 
