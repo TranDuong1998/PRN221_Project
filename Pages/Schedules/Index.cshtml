@@ -1,0 +1,102 @@
+﻿@page "{accountId?}"
+@model PRN211_Project.Pages.Schedules.IndexModel
+﻿@using Microsoft.AspNetCore.Identity
+@using PRN211_Project.Models
+@using PRN211_Project.Services
+
+@{
+}
+
+<h1 class=" text-white">@Model.Title</h1>
+
+<div class="col">
+    @if (Model.Account.Role.ToLower().Equals("admin"))
+    {
+        <div class="text-end">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">Import</button>
+        </div>
+
+        <!-- Vertically centered modal -->
+        <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-black">
+                        <h5 class="modal-title">Import File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" asp-action="ImportFile">
+                            <div class="form-group">
+                                <label class="control-label">File</label>
+                                <input class="form-control" type="file" id="fileInput" accept=".xlsx, .xls, .csv, .json">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" onclick="importFile()">Import</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="container bg-light text-black rounded">
+    <table class="table">
+        <thead>
+            <tr>
+                @for (int i = 0; i <= Model.Col; i++)
+                {
+                    @if (Model.WeeklyTable[0, i].Contains('-'))
+                    {<th scope="col" class="col-2">
+                        @foreach (var part in Model.WeeklyTable[0, i].Split('-'))
+                        {
+                            @part
+                            <br />
+                        }
+                        </th>
+                    }
+                    else
+                    {
+                        <th scope="col" class="col-2">@Model.WeeklyTable[0, i]</th>
+                    }
+                    
+                }
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 1; i <= Model.Row; i++)
+            {
+                <tr>
+                    @for (int j = 0; j <= Model.Col; j++)
+                    {
+                        <td scope="row">@Model.WeeklyTable[i, j]</td>
+                    }
+
+                    @* @if (i - 1 < Model.WeeklyTimeTable.Count)
+                    {
+                        <td scope="row">
+                            <a asp-page="./Edit" asp-route-id="@Model.WeeklyTimeTable[i].Id" class="text-primary"><i class="fas fa-edit"></i></a> |
+                            <a asp-page="./Details" asp-route-id="@Model.WeeklyTimeTable[i].Id" class="text-primary"><i class="fas fa-info-circle"></i></a> |
+                            <a asp-page="./Delete" asp-route-id="@Model.WeeklyTimeTable[i].Id" class="text-danger"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                    } *@
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function importFile() {
+        var selectedFile = document.getElementById("fileInput").files[0];
+        if (selectedFile) {
+            console.log("File selected:", selectedFile);
+        } else {
+            alert("Please choose a file to import.");
+        }
+        $('#importModal').modal('hide');
+    }
+</script>

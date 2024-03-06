@@ -1,16 +1,10 @@
-if exists (SELECT name FROM master.dbo.sysdatabases WHERE name = 'PRN211_project')
-begin
-	drop DATABASE PRN211_project
-end
-else
-begin
-	create database PRN211_project
-end
+create database PRN211_project
+go
 
 use PRN211_project
 go
 
-create table Account
+create table Accounts
 (
 	AccountId int identity(1,1),
 	UserName varchar(50) unique,
@@ -44,17 +38,17 @@ create table Teachers
 	DOB  date,
 
 	constraint pk_Teachers primary key (TeacherId),
-	constraint fk_TeacherAccount foreign key (AccountId) references Account (AccountId)
+	constraint fk_TeacherAccount foreign key (AccountId) references Accounts (AccountId)
 )
 go
 
-create table Classs
+create table ClassRooms
 (
 	ClassId int identity(1,1),
 	ClassName varchar(50),
 	Description nvarchar(255)
 
-	constraint pk_Classs primary key (ClassId)
+	constraint pk_ClassRooms primary key (ClassId)
 )
 go
 
@@ -68,7 +62,7 @@ create table TeacherDetails
 	constraint pk_TeacherDetails primary key (Id),
 	constraint fk_TeacherDetailCourse foreign key (CourseId) references Courses (CourseId),
 	constraint fk_TeacherDetailTeacher foreign key (TeacherId) references Teachers (TeacherId),
-	constraint fk_TeacherDetailClass foreign key (ClassId) references Classs (ClassId),
+	constraint fk_TeacherDetailClassRooms foreign key (ClassId) references ClassRooms (ClassId),
 
 )
 go
@@ -109,21 +103,21 @@ create table WeeklyTimeTable
 	constraint fk_WeeklyTimeTableTeachers foreign key (TeachersId) references Teachers (TeacherId),
 	constraint fk_WeeklyTimeTableRooms foreign key (RoomsId) references Rooms (RoomsId),
 	constraint fk_WeeklyTimeTableCourse foreign key (CourseId) references Courses (CourseId),
-	constraint fk_WeeklyTimeTableClass foreign key (ClassId) references Classs (ClassId),
+	constraint fk_WeeklyTimeTableClassRooms foreign key (ClassId) references ClassRooms (ClassId),
 	constraint fk_WeeklyTimeTableTime foreign key (TimeSlotId) references TimeSlot (TimeSlotId)
 )
 go
 
-insert into Account (UserName, Email, Password, Role, Active)
+insert into Accounts (UserName, Email, Password, Role, Active)
 values				('admin','admin@gmail.com','12345678','admin', 1),
-					('duong','duong@gmail.com','12345678','user', 1)
+					('duong','duong@gmail.com','12345678','teacher', 1)
 
-insert into Courses(CourseName, CourseCode)
+insert into Courses	(CourseName, CourseCode)
 values			('Basic Cross-Platform Application Programming With .NET', 'PRN211'),
 				('Mobile Programming', 'PRM392'),
 				('SW Architecture and Design', 'SWD392')
 
-insert into TimeSlot(StartTime, EndTime, Description)
+insert into TimeSlot (StartTime, EndTime, Description)
 values			('07:30:00', '09:50:00', 'Slot 1'),
 				('10:00:00', '12:20:00', 'Slot 2'),
 				('12:50:00', '15:10:00', 'Slot 3'),
@@ -136,6 +130,6 @@ insert into Rooms (RoomsName)
 values	('DC201'),('DC202'),('DC203'),('DC204'),('D205'),
 		('D206'),('D207'),('D208'),('D209'),('D210')
 
-insert into Classs	(ClassName)
+insert into ClassRooms	(ClassName)
 values	('SE1610'),('SE1611'),('SE1612'),('SE1613'),('SE1614'),
 		('JD1610'),('JD1611'),('JD1612'),('JD1613'),('JD1614')

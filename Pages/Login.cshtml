@@ -1,0 +1,79 @@
+﻿@page "/Login"
+@model PRN211_Project.Pages.LoginModel
+@{
+}
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="744318017465-b6b6m4vvr27tfn21uru79liua35dpvsa.apps.googleusercontent.com">
+
+<body onload="@((Model.CheckAccount) ? "" : $"showNotFoundModal('{Model.Message}')")">
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3>Sign In</h3>
+                    <div class="d-flex justify-content-end social_icon">
+                        <span><i class="fab fa-facebook-square"></i></span>
+                        <span><i class="fab fa-google-plus-square"></i></span>
+                        <span><i class="fab fa-twitter-square"></i></span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <section>
+                        <form class="cardbody-color" method="post" id="form_login">
+                            <div class="text-center">
+                                <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png"
+                                     class="img-fluid profile-image-pic img-thumbnail rounded-circle my-2 mb-3"
+                                     width="80px" alt="profile">
+                            </div>
+                            <div class="input-group input-group-prepend mb-3">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp" value="@Model.Email"
+                                       placeholder="User Name or Email">
+                            </div>
+
+                            <div class="input-group input-group-prepend mb-3">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="@Model.Password">
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" id="login" class="btn login_btn mb-2 w-100">
+                                    Login
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                    <div class="text-center">
+                        <section>
+                            @{
+                                if ((Model.ExternalLogins?.Count ?? 0) != 0)
+                                {
+                                    <form id="otherLogin" asp-page="./OtherLoginModel" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                        <div>
+                                            <p>
+                                                @foreach (var provider in Model.ExternalLogins)
+                                                {
+                                                    <button type="submit" class="btn btn-primary fw-bold" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                                        <span class="fs-4"><i class="fab fa-google-plus-g"></i></span> @provider.Name
+                                                    </button>
+                                                }
+                                            </p>
+                                        </div>
+                                    </form>
+                                }
+                            }
+                        </section>
+                    </div>
+                    <div id="emailHelp" class="form-text text-center mb-5 text-white">
+                        <a class="text-white fw-bold" asp-area="" asp-page="/ForgotPassword">Don't remember your password?</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
