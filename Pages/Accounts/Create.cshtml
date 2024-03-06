@@ -1,0 +1,91 @@
+﻿@page
+@model PRN211_Project.Pages.Accounts.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<body onload="@((Model.CheckAccount) ? "" : $"showNotFoundModal('{Model.Message}')")">
+    <h1 class="text-white">Account Management</h1>
+
+    <div class="container bg-light text-black rounded">
+        <div class="container py-2">
+            <h4 class="mt-3">Create Account</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group mb-2">
+                            <label asp-for="Account.UserName" class="control-label"></label>
+                            <input asp-for="Account.UserName" class="form-control" />
+                            <span asp-validation-for="Account.UserName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label asp-for="Account.Email" class="control-label"></label>
+                            <input asp-for="Account.Email" class="form-control" />
+                            <span asp-validation-for="Account.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label asp-for="Account.Password" class="control-label"></label>
+                            <input asp-for="Account.Password" type="password" class="form-control" />
+                            <span asp-validation-for="Account.Password" class="text-danger"></span>
+                        </div>
+                        <div class="d-flex mb-2">
+                            <label>Role:</label>
+                            <div class="form-check mx-5">
+                                <input class="form-check-input" type="radio" asp-for="Account.Role" value="teacher" name="Role" id="Role">
+                                <label class="form-check-label" asp-for="Account.Role">
+                                    Teacher
+                                </label>
+                            </div>
+
+                            <div class="form-check mx-5">
+                                <input class="form-check-input" type="radio" asp-for="Account.Role" value="student" name="Role" id="Role">
+                                <label class="form-check-label" asp-for="Account.Role">
+                                    Student
+                                </label>
+                            </div>
+                            <span asp-validation-for="Account.Role" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex mb-2">
+                            <label>Status:</label>
+                            <div class="form-check mx-5">
+                                <input class="form-check-input" type="radio" asp-for="Account.Active" value="true" name="Active" id="Active" checked>
+                                <label class="form-check-label" asp-for="Account.Active">
+                                    Active
+                                </label>
+                            </div>
+
+                            <div class="form-check mx-5">
+                                <input class="form-check-input" type="radio" asp-for="Account.Active" value="false" name="Active" id="Active">
+                                <label class="form-check-label" asp-for="Account.Active">
+                                    Deactive
+                                </label>
+                                <span asp-validation-for="Account.Active" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="form-group mb-3 mx-5">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                            <div class="form-group mb-3">
+                                <button type="reset" class="btn btn-primary">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="mb-2">
+                    <a asp-page="Index"></i> <i class="fas fa-arrow-left"></i> Back to List</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

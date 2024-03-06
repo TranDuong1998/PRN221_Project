@@ -1,0 +1,146 @@
+﻿﻿@using Microsoft.AspNetCore.Identity
+@using PRN211_Project.Models
+@using PRN211_Project.Entities
+
+@using PRN211_Project.Services
+
+<div class="dropdown">
+    <div class="text-end">
+        @{
+            bool check = false;
+            Account userAccount = null;
+            Teacher teacher = null;
+            if (Context.Session.GetAmdinObject("Account") != null)
+            {
+                userAccount = Context.Session.GetAmdinObject("Account");
+                check = true;
+            }
+            if (Context.Session.GetTeacherObject("Teacher") != null)
+            {
+                teacher = Context.Session.GetTeacherObject("Teacher");
+                check = true;
+            }
+
+        }
+        @if (check == true)
+        {
+            @if (userAccount != null && userAccount.Role.Equals("admin"))
+            {
+                <button class="btn btn_menu dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                    Hello @userAccount.UserName!
+                </button>
+            }
+            else if (teacher != null && userAccount.Role.Equals("teacher"))
+            {
+                <button class="btn btn_menu dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                    Hello @teacher.Account.Email!
+                </button>
+            }
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                @if (userAccount != null && userAccount.Role.Equals("admin"))
+                {
+                    <li>
+                        <a class="dropdown-item" asp-page="/Accounts/index">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-user-cog"></i> Account
+                            </button>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-page="/Teachers/index">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-chalkboard-teacher"></i> Teacher
+                            </button>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-page="/Courses/index">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-journal-whills"></i> Course
+                            </button>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-page="">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-user-graduate"></i> Student
+                            </button>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-page="/Slots/index">
+                            <button class="dropdown-item" type="button">
+                                <i class="far fa-clock"></i> Time Slot
+                            </button>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-page="/ClassRooms/index">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-house-user"></i> Classroom
+                            </button>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-page="/Schedules/index">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-calendar-alt"></i> Schedule
+                            </button>
+                        </a>
+                    </li>
+                }
+                else if (teacher != null && userAccount.Role.Equals("teacher"))
+                {
+                    <li>
+                        <a class="dropdown-item" asp-page="/Teachers/Details" asp-route-id="@teacher.TeacherId">
+                            <button class="dropdown-item" type="button">
+                                <i class="far fa-id-card"></i> Profile
+                            </button>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" asp-page="/Schedules/index" asp-route-id="">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-calendar-alt"></i> View Schedule
+                            </button>
+                        </a>
+                    </li>
+                }
+                @* else if (userAccount.Role.ToLower().Equals("student"))
+            {
+            <li>
+            <a class="dropdown-item" asp-page="/Students/Details" asp-route-id="">
+            <button class="dropdown-item" type="button">
+            <i class="far fa-id-card"></i> Profile
+            </button>
+            </a>
+            </li>
+
+            <li>
+            <a class="dropdown-item" asp-page="/Schedules/index" asp-route-id="">
+            <button class="dropdown-item" type="button">
+            <i class="fas fa-calendar-alt"></i> View Schedule
+            </button>
+            </a>
+            </li>
+            } *@
+                <li>
+                    <form id="logoutForm" class="dropdown-item form-inline" asp-area="Identity" asp-page="/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class="dropdown-item btn btn-link text-dark">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                </li>
+
+            </ul>
+        }
+        else
+        {
+            <button class="btn btn_login" type="button" onclick="location.href ='/Login'">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        }
+    </div>
+</div>
+

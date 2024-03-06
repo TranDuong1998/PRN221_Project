@@ -1,0 +1,69 @@
+﻿@page
+@model PRN211_Project.Pages.Accounts.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-white">Account Management</h1>
+
+<p>
+    <a asp-page="Create">
+        <button type="button" class="btn btn-primary">Create New</button>
+    </a>
+</p>
+<table class="table bg-light text-black rounded table-fixed">
+    <thead>
+        <tr>
+            <th scope="col" class="text-center">
+                .No
+            </th>
+            <th scope="col">
+                User Name
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Account[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Role)
+            </th>
+            <th scope="col" class="text-center">
+                @Html.DisplayNameFor(model => model.Account[0].Active)
+            </th>
+            <th scope="col" class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Account)
+        {
+            <tr>
+                <td scope="row" class="text-center col-1">
+                    @(Model.Account.IndexOf(item) + 1)
+                </td>
+                <td scope="row" class="col-3">
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td scope="row" class="col-3">
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td scope="row" class="col-2">
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                <td scope="row" class="text-center col-1">
+                    <div class="w-10 rounded-circle">
+                        <input disable type="radio" class="btn-check" name="@item.AccountId" id="@item.AccountId" autocomplete="off"
+                               checked="@item.Active">
+                        <label class="btn @((item.Active == true) ? "btn-outline-success" : "btn-danger") "
+                               for="@item.AccountId"></label>
+                    </div>
+                </td>
+                <td scope="col" class="text-center col-2">
+                    <a asp-page="./Edit" asp-route-id="@item.AccountId" class="text-primary"><i class="fas fa-edit"></i></a> |
+                    <a asp-page="./Details" asp-route-id="@item.AccountId" class="text-primary"><i class="fas fa-info-circle"></i></a> |
+                    <a asp-page="./Delete" asp-route-id="@item.AccountId" class="text-danger"><i class="far fa-trash-alt"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div><vc:pagin page-url="/Accounts/index" total-page="@Model.TotalPages" current-page="@Model.CurrentPage" page-index="1"></vc:pagin></div>
