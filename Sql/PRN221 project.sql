@@ -57,21 +57,30 @@ create table TeacherDetails
 	Id int identity(1,1),
 	TeacherId int,
 	CourseId int,
-	ClassId int
 
 	constraint pk_TeacherDetails primary key (Id),
 	constraint fk_TeacherDetailCourse foreign key (CourseId) references Courses (CourseId),
-	constraint fk_TeacherDetailTeacher foreign key (TeacherId) references Teachers (TeacherId),
-	constraint fk_TeacherDetailClassRooms foreign key (ClassId) references ClassRooms (ClassId),
+	constraint fk_TeacherDetailTeacher foreign key (TeacherId) references Teachers (TeacherId)
+)
+go
 
+create table TeacherClasses
+(
+	Id int identity(1,1),
+	TeacherId int,
+	ClassId int,
+
+	constraint pk_TeacherClasses primary key (Id),
+	constraint fk_TeacherClassesClassRooms foreign key (ClassId) references ClassRooms (ClassId),
+	constraint fk_TeacherClassesTeacher foreign key (TeacherId) references Teachers (TeacherId)
 )
 go
 
 create table TimeSlot
 (
 	TimeSlotId int identity(1,1),
-	StartTime datetime,
-	EndTime datetime,
+	StartTime time,
+	EndTime time,
 	Description varchar(50)
 
 	constraint pk_TimeSlot primary key (TimeSlotId)

@@ -7,14 +7,18 @@ namespace PRN211_Project.Pages.Shared.ViewComponents
     {
         public List<object> Items { get; set; }
         public PaginationViewModel PaginationViewModel { get; set; }
-        public IViewComponentResult Invoke(string pageUrl,int totalPage, int currentPage, int pageIndex)
+        public IViewComponentResult Invoke(string pageUrl,int totalPage, int currentPage, int pageIndex, 
+                                            string filter, string viewDate, string search)
         {
             var model = new PaginationViewModel
             {
                 PageUrl = pageUrl,
                 TotalPage = totalPage,
                 CurrentPage = currentPage,
-                PageIndex = pageIndex
+                PageIndex = pageIndex,
+                Filter = filter,
+                ViewDate = viewDate,
+                Search = search
             };
 
             return View("/Pages/Shared/Component/Pagination/Pagination.cshtml", model);
@@ -26,6 +30,8 @@ namespace PRN211_Project.Pages.Shared.ViewComponents
         public int TotalPage { get; set; }
         public int CurrentPage { get; set; }
         public int PageIndex { get; set; }
-
+        public string Filter { get; set; }
+        public string ViewDate { get; set; }
+        public string Search { get; set; }
     }
 }

@@ -16,4 +16,7 @@ public partial class ClassRoom
     public virtual ICollection<TeacherDetail> TeacherDetails { get; } = new List<TeacherDetail>();
     [JsonIgnore]
     public virtual ICollection<WeeklyTimeTable> WeeklyTimeTables { get; } = new List<WeeklyTimeTable>();
+    [JsonIgnore]
+    public virtual ICollection<TeacherClass> TeacherClasses { get; } = new List<TeacherClass>();
+
 }

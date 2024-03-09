@@ -64,6 +64,8 @@ namespace PRN211_Project.Pages.Slots
                 return Page();
             }
 
+            
+
             _context.Attach(TimeSlot).State = EntityState.Modified;
 
             try
@@ -87,7 +89,12 @@ namespace PRN211_Project.Pages.Slots
 
         private bool TimeSlotExists(int id)
         {
-          return (_context.TimeSlots?.Any(e => e.TimeSlotId == id)).GetValueOrDefault();
+            return (_context.TimeSlots?.Any(e => e.TimeSlotId == id)).GetValueOrDefault();
+        }
+
+        private bool TimeSlotExists(TimeSpan checkTime)
+        {
+            return (_context.TimeSlots?.Any(e => e.StartTime >= checkTime && e.EndTime <= checkTime)).GetValueOrDefault();
         }
     }
 }
