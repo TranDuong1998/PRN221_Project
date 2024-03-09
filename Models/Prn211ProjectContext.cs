@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using PRN211_Project.Models;
 
 namespace PRN211_Project.Models;
 
@@ -25,6 +26,8 @@ public partial class Prn211ProjectContext : DbContext
 
     public virtual DbSet<Teacher> Teachers { get; set; }
 
+    public virtual DbSet<TeacherClass> TeacherClasses { get; set; }
+
     public virtual DbSet<TeacherDetail> TeacherDetails { get; set; }
 
     public virtual DbSet<TimeSlot> TimeSlots { get; set; }
@@ -39,7 +42,6 @@ public partial class Prn211ProjectContext : DbContext
         IConfigurationRoot configuration = builder.Build();
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("MyDb"));
     }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -116,13 +118,22 @@ public partial class Prn211ProjectContext : DbContext
                 .HasConstraintName("fk_TeacherAccount");
         });
 
+        modelBuilder.Entity<TeacherClass>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pk_TeacherClasses");
+
+            entity.HasOne(d => d.Class).WithMany(p => p.TeacherClasses)
+                .HasForeignKey(d => d.ClassId)
+                .HasConstraintName("fk_TeacherClassesClassRooms");
+
+            entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherClasses)
+                .HasForeignKey(d => d.TeacherId)
+                .HasConstraintName("fk_TeacherClassesTeacher");
+        });
+
         modelBuilder.Entity<TeacherDetail>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk_TeacherDetails");
-
-            entity.HasOne(d => d.Class).WithMany(p => p.TeacherDetails)
-                .HasForeignKey(d => d.ClassId)
-                .HasConstraintName("fk_TeacherDetailClassRooms");
 
             entity.HasOne(d => d.Course).WithMany(p => p.TeacherDetails)
                 .HasForeignKey(d => d.CourseId)
@@ -142,8 +153,6 @@ public partial class Prn211ProjectContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.EndTime).HasColumnType("datetime");
-            entity.Property(e => e.StartTime).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<WeeklyTimeTable>(entity =>

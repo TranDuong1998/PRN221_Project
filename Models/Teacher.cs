@@ -21,6 +21,10 @@ public partial class Teacher
     public DateTime? Dob { get; set; }
 
     public virtual Account? Account { get; set; }
+
+    [JsonIgnore]
+    public virtual ICollection<TeacherClass> TeacherClasses { get; } = new List<TeacherClass>();
+
     [JsonIgnore]
     public virtual ICollection<TeacherDetail> TeacherDetails { get; } = new List<TeacherDetail>();
     [JsonIgnore]
