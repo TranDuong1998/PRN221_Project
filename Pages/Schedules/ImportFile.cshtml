@@ -1,0 +1,137 @@
+﻿@page
+@model PRN211_Project.Pages.Schedules.ScheduleModel
+@{
+}
+
+@using PRN211_Project.Models
+@using PRN211_Project.Entities
+
+
+<style>
+    .image-demo {
+        max-height: 450px;
+        max-width: 650px;
+        width: auto;
+        height: auto;
+    }
+
+    .modal-content {
+        width: auto;
+    }
+</style>
+
+<h1 class=" text-white">Teacher Management</h1>
+
+<div class="container row justify-content-center">
+
+    <!-- Vertically centered modal -->
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-black">
+                    <h5 class="modal-title">Import File Fomat!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-grid">
+                    <h5 class="text-danger">* JSON file and CSV file with column "Date" must be format "MM/dd/yyyy"! </h5>
+                    <div class="mb-3">
+                        <label>Import with Excel File</label>
+                        <img src="~/image/demo excel.png" class="image-demo" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Import with Csv File</label>
+                        <img src="~/image/demo file csv.png" class="image-demo" />
+                    </div>
+                    <div class="col-lg-6">
+                        <label>Import with JSON File</label>
+                        <img src="~/image/demo json file.png" class="image-demo" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-light text-black justify-content-center row rounded">
+        <div class="mt-2 col-lg-8 py-2">
+            <form method="post" asp-page="./ImportFile" enctype="multipart/form-data" class="d-flex justify-content-center">
+                <div class="text-start">
+                    <a class="fs-5 text-danger rounded-circle mx-1" data-bs-toggle="modal" data-bs-target="#importModal">
+                        <span class="fs-5"><i class="fas fa-exclamation-triangle"></i></span>
+                    </a>
+                </div>
+                <label class="control-label py-2">File</label>
+                <div class="form-group mx-2 col-lg-6">
+                    <input class="form-control file-input" asp-for="FileUploads"
+                           type="file" id="fileInput" accept=".xlsx, .xls, .csv, .json" />
+                    <input class="form-control file-input" asp-for="FilePath"
+                           type="text" id="fileInput" hidden value="@(Model.FileUploads != null ? Model.FileUploads.FileName : "")" />
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary"
+                            asp-route-FileUploads="@Model.FileUploads"
+                            asp-page-handler="ViewData"
+                            onclick="importFile()">
+                        View
+                    </button>
+                </div>
+                <div class="text-end mx-3">
+                    <button type="submit" class="btn btn-warning"
+                            asp-route-FileUploads="@Model.FileUploads"
+                            asp-page-handler="ImportFile">
+                        Import
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        @if (Model.Data.Count != 0)
+        {
+            <table class="table table-fixed">
+                <thead>
+                    <tr>
+                        <th scope="col">Room</th>
+                        <th scope="col">TimeSlot</th>
+                        <th scope="col">Class</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Teacher</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (ScheduleData item in Model.Data.Keys)
+                    {
+                        <tr class="@(Model.Data[item] > 0 ? "text-danger" : "text-success")">
+                            <td scope="row">@item.Room</td>
+                            <td scope="row">@item.TimeSlot</td>
+                            <td scope="row">@item.Class</td>
+                            <td scope="row">@item.Subject</td>
+                            <td scope="row">@item.Teacher</td>
+                            <td scope="row">@item.Date.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div>
+                <h5>No file select</h5>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    function importFile() {
+        var selectedFile = document.getElementById("fileInput").files[0];
+        if (selectedFile) {
+            console.log("File selected:", selectedFile);
+        } else {
+            alert("Please choose a file to import.");
+        }
+    }
+
+</script>

@@ -13,31 +13,9 @@
     @if (Model.Account.Role.ToLower().Equals("admin"))
     {
         <div class="text-end mb-3">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">Import</button>
-        </div>
-
-        <!-- Vertically centered modal -->
-        <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header text-black">
-                        <h5 class="modal-title">Import File</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" asp-action="ImportFile">
-                            <div class="form-group">
-                                <label class="control-label">File</label>
-                                <input class="form-control" type="file" id="fileInput" accept=".xlsx, .xls, .csv, .json">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary" onclick="importFile()">Import</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <a asp-page="./ImportFile">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">Import Schedule</button>
+            </a>
         </div>
     }
 </div>
@@ -121,23 +99,3 @@
     <vc:pagin page-url="./index" total-page="@Model.TotalPages"
               current-page="@Model.CurrentPage" page-index="1" filter="" search="" view-date="@Model.ViewDate.ToString("yyyy-MM-dd")"></vc:pagin>
 </div>
-
-<script>
-    function importFile() {
-        var selectedFile = document.getElementById("fileInput").files[0];
-        if (selectedFile) {
-            console.log("File selected:", selectedFile);
-        } else {
-            alert("Please choose a file to import.");
-        }
-        $('#importModal').modal('hide');
-    }
-
-    $(document).ready(function () {
-        $('#datepicker').datepicker({
-            format: 'dd/MM/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
-    });
-</script>
