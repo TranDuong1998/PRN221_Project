@@ -5,8 +5,6 @@ namespace PRN211_Project.Pages.Shared.ViewComponents
 {
     public class PaginViewComponent : ViewComponent
     {
-        public List<object> Items { get; set; }
-        public PaginationViewModel PaginationViewModel { get; set; }
         public IViewComponentResult Invoke(string pageUrl,int totalPage, int currentPage, int pageIndex, 
                                             string filter, string viewDate, string search)
         {

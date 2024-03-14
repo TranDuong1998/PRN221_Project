@@ -13,6 +13,8 @@ builder.Services.AddDbContext<Prn211ProjectContext>(
     opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"))
     );
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddAuthentication()
         .AddGoogle(googleOptions =>
         {
