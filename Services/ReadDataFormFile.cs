@@ -82,7 +82,6 @@ namespace PRN211_Project.Services
                                 Class = worksheet.Cells[row, 4].Value?.ToString(),
                                 Subject = worksheet.Cells[row, 5].Value?.ToString(),
                                 Teacher = worksheet.Cells[row, 6].Value?.ToString(),
-                                Date = Convert.ToDateTime(worksheet.Cells[row, 7].Value?.ToString()),
                             });
                         }
                     }

@@ -61,7 +61,16 @@ namespace PRN211_Project.Pages.Accounts
             {
                 _context.Accounts.Add(Account);
                 await _context.SaveChangesAsync();
-
+                if (Account.Role.ToLower().Equals("teacher"))
+                {
+                    Teacher teacher = new Teacher()
+                    {
+                        Account = Account,
+                        AccountId = Account.AccountId,
+                    };
+                    _context.Teachers.Add(teacher);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToPage("./Index");
             }
         }

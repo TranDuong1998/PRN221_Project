@@ -5,7 +5,7 @@ namespace PRN211_Project.Pages.Shared.ViewComponents
 {
     public class PaginViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(string pageUrl,int totalPage, int currentPage, int pageIndex, 
+        public IViewComponentResult Invoke(string pageUrl,int totalPage, int currentPage, int pageIndex, int displayRange,
                                             string filter, string viewDate, string search)
         {
             var model = new PaginationViewModel
@@ -14,6 +14,7 @@ namespace PRN211_Project.Pages.Shared.ViewComponents
                 TotalPage = totalPage,
                 CurrentPage = currentPage,
                 PageIndex = pageIndex,
+                DisplayRange = displayRange,
                 Filter = filter,
                 ViewDate = viewDate,
                 Search = search
@@ -28,6 +29,7 @@ namespace PRN211_Project.Pages.Shared.ViewComponents
         public int TotalPage { get; set; }
         public int CurrentPage { get; set; }
         public int PageIndex { get; set; }
+        public int DisplayRange { get; set; }
         public string Filter { get; set; }
         public string ViewDate { get; set; }
         public string Search { get; set; }

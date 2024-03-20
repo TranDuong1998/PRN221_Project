@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddRazorPages();
 builder.Services.AddDbContext<Prn211ProjectContext>(
     opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"))
     );
