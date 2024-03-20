@@ -9,25 +9,15 @@
 
 <h1 class=" text-white">@Model.Title</h1>
 
-<div class="col">
-    @if (Model.Account.Role.ToLower().Equals("admin"))
-    {
-        <div class="text-end mb-3">
-            <a asp-page="./ImportFile">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">Import Schedule</button>
-            </a>
-        </div>
-    }
-</div>
 <div class="bg-light text-black rounded">
     <div class="container row justify-content-center">
-        <div class="col-lg-4 py-2 mt-2">
+        <div class="col-lg-10 py-2 mt-2">
             <form method="get">
-                <div class="d-flex">
-                    <div class="form-group mb-2">
+                <div class="d-flex justify-content-center">
+                    <div class="form-group mb-2 py-2">
                         <label for="ViewDate">Select date:</label>
                     </div>
-                    <div class="form-group mb-2 mx-2">
+                    <div class="form-group mb-2 mx-2 col-lg-2">
                         <input type="date" class="form-control" asp-for="ViewDate" id="ViewDate" />
                     </div>
                     <div class="form-group mb-2">
@@ -35,6 +25,16 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="col-lg-2 py-2 mt-2">
+            @if (Model.Account.Role.ToLower().Equals("admin"))
+            {
+                <div class="text-end mb-3">
+                    <a asp-page="./ImportFile">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">Import Schedule</button>
+                    </a>
+                </div>
+            }
         </div>
         <hr />
     </div>
@@ -96,6 +96,7 @@
 </div>
 
 <div>
-    <vc:pagin page-url="./index" total-page="@Model.TotalPages"
-              current-page="@Model.CurrentPage" page-index="1" filter="" search="" view-date="@Model.ViewDate.ToString("yyyy-MM-dd")"></vc:pagin>
+    <vc:pagin page-url="./index" total-page="@Model.TotalPages" display-range="5"
+              current-page="@Model.CurrentPage" page-index="1"
+              filter="" search="" view-date="@Model.ViewDate.ToString("yyyy-MM-dd")"></vc:pagin>
 </div>

@@ -10,7 +10,7 @@
 <style>
     .image-demo {
         max-height: 450px;
-        max-width: 650px;
+        max-width: 480px;
         width: auto;
         height: auto;
     }
@@ -18,14 +18,15 @@
     .modal-content {
         width: auto;
     }
+
 </style>
 
-<h1 class=" text-white">Teacher Management</h1>
+<h1 class="text-white">Teacher Management</h1>
 
 <div class="container row justify-content-center">
 
     <!-- Vertically centered modal -->
-    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal fade py-2" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header text-black">
@@ -33,7 +34,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-grid">
-                    <h5 class="text-danger">* JSON file and CSV file with column "Date" must be format "MM/dd/yyyy"! </h5>
                     <div class="mb-3">
                         <label>Import with Excel File</label>
                         <img src="~/image/demo excel.png" class="image-demo" />
@@ -84,7 +84,7 @@
             </form>
         </div>
 
-        @if (Model.Data.Count != 0)
+        @if (Model.Data != null)
         {
             <table class="table table-fixed">
                 <thead>
@@ -94,20 +94,18 @@
                         <th scope="col">Class</th>
                         <th scope="col">Subject</th>
                         <th scope="col">Teacher</th>
-                        <th scope="col">Date</th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (ScheduleData item in Model.Data.Keys)
                     {
-                        <tr class="@(Model.Data[item] > 0 ? "text-danger" : "text-success")">
+                        <tr class="@(Model.Data[item] > 0 ? "text-danger" : "text-success") @(Model.Data[item] == 0 ? "text-dark" : "") ">
                             <td scope="row">@item.Room</td>
                             <td scope="row">@item.TimeSlot</td>
                             <td scope="row">@item.Class</td>
                             <td scope="row">@item.Subject</td>
                             <td scope="row">@item.Teacher</td>
-                            <td scope="row">@item.Date.ToString("dd/MM/yyyy")</td>
                         </tr>
                     }
 
