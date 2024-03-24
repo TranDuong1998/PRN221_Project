@@ -1,0 +1,41 @@
+﻿@page
+@model PRN211_Project.Pages.TeacherInCourses.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="text-white mt-3">Create</h1>
+<div class="container bg-light text-black rounded">
+    <div class="container py-2">
+        <h4>TeacherDetail</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group mb-2">
+                        <label asp-for="TeacherDetail.TeacherId" class="control-label">Teacher</label>
+                        <select asp-for="TeacherDetail.TeacherId" class="form-control form-select" asp-items="ViewBag.TeacherId"></select>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label asp-for="TeacherDetail.CourseId" class="control-label">Course</label>
+                        <select asp-for="TeacherDetail.CourseId" class="form-control form-select" asp-items="ViewBag.CourseId"></select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+            <div>
+                <a asp-page="Index"><i class="fas fa-arrow-left"></i> Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

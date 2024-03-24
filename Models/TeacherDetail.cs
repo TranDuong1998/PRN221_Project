@@ -11,8 +11,6 @@ public partial class TeacherDetail
 
     public int? CourseId { get; set; }
 
-    public int? ClassId { get; set; }
-
     public virtual Course? Course { get; set; }
 
     public virtual Teacher? Teacher { get; set; }

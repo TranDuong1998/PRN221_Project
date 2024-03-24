@@ -24,7 +24,7 @@ namespace PRN211_Project.Pages.Schedules
             _httpContext = httpContext;
         }
 
-        private int PageSize = 5;
+        private int PageSize = 10;
         public int TotalPages { get; set; }
 
         [BindProperty(SupportsGet = true)]
@@ -49,70 +49,82 @@ namespace PRN211_Project.Pages.Schedules
                 Account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
                 if (Account.Role.ToLower().Equals("admin"))
                     Title = "Shedule Management";
-                else
+                else if (Account.Role.ToLower().Equals("teacher"))
                     Title = "Shedule";
 
                 TotalPages = (int)Math.Ceiling((double)_context.Rooms.Count() / PageSize);
 
                 CurrentPage = Math.Max(1, Math.Min(PageIndex, TotalPages));
-
-                var slots = _context.TimeSlots.ToList();
-                var rooms = _context.Rooms.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
-                var learnDate = _context.WeeklyTimeTables.OrderBy(w => w.LearnDate).ToList();
-                var teacher = _context.Teachers.ToList();
-                var classRoom = _context.ClassRooms.ToList();
-
-                viewDate = ViewDate;
-                ViewDate = viewDate;
-
-                Col = slots.Count;
-                Row = rooms.Count;
-
-                WeeklyTimeTable = new List<WeeklyTimeTable>();
-
-                WeeklyTable = new string[Row + 1, Col + 1];
-                WeeklyTable[0, 0] = "Room";
-
-                for (int i = 1; i <= Row; i++)
+                if (Account.Role.ToLower().Equals("admin") || (Account.Role.ToLower().Equals("teacher")))
                 {
+                    var slots = _context.TimeSlots.ToList();
+                    var rooms = _context.Rooms.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+                    var learnDate = _context.WeeklyTimeTables.OrderBy(w => w.LearnDate).ToList();
+                    var teacher = _context.Teachers.ToList();
+                    var t = _context.Teachers.Where(t => t.AccountId == Account.AccountId).FirstOrDefault();
+                    var classRoom = _context.ClassRooms.ToList();
 
-                    WeeklyTable[i, 0] = rooms[i - 1].RoomsName;
+                    viewDate = ViewDate;
+                    ViewDate = viewDate;
 
-                }
+                    Col = slots.Count;
+                    Row = rooms.Count;
 
-                for (int j = 1; j <= Col; j++)
-                {
-                    WeeklyTable[0, j] = $"{slots[j - 1].Description} \\ " +
-                        $"({(slots[j - 1].StartTime == null ? "" : slots[j - 1].StartTime?.ToString("hh\\:mm")) + " - " + (slots[j - 1].EndTime == null ? "" : slots[j - 1].EndTime?.ToString("hh\\:mm"))})";
-                }
+                    WeeklyTimeTable = new List<WeeklyTimeTable>();
 
-                for (int i = 1; i <= Row; i++)
-                {
+                    WeeklyTable = new string[Row + 1, Col + 1];
+                    WeeklyTable[0, 0] = "Room";
+
+                    for (int i = 1; i <= Row; i++)
+                    {
+
+                        WeeklyTable[i, 0] = rooms[i - 1].RoomsName;
+
+                    }
+
                     for (int j = 1; j <= Col; j++)
                     {
-                        foreach (var l in learnDate)
+                        WeeklyTable[0, j] = $"{slots[j - 1].Description} \\ " +
+                            $"({(slots[j - 1].StartTime == null ? "" : slots[j - 1].StartTime?.ToString("hh\\:mm")) + " - " + (slots[j - 1].EndTime == null ? "" : slots[j - 1].EndTime?.ToString("hh\\:mm"))})";
+                    }
+
+                    for (int i = 1; i <= Row; i++)
+                    {
+                        for (int j = 1; j <= Col; j++)
                         {
-                            var Weekdaly = _context.WeeklyTimeTables
-                                               .Include(w => w.Class)
-                                               .Include(w => w.Course)
-                                               .Include(w => w.Rooms)
-                                               .Include(w => w.Teachers)
-                                               .Include(w => w.TimeSlot)
-                                               .Where(w => w.LearnDate == viewDate &&
-                                                          w.RoomsId == rooms[i - 1].RoomsId &&
-                                                          w.TimeSlotId == slots[j - 1].TimeSlotId)
-                                               .OrderBy(w => w.LearnDate)
-                                               .Skip((CurrentPage - 1) * PageSize).Take(PageSize)
-                                               .FirstOrDefault();
-                            if (Weekdaly != null)
-                                WeeklyTable[i, j] = $"{Weekdaly.Class.ClassName}\\{Weekdaly.Course.CourseCode}\\{Weekdaly.Teachers.TeachersCode}";
-                            else
+                            if (learnDate.Count == 0)
                                 WeeklyTable[i, j] = "-";
+                            else
+                                foreach (var l in learnDate)
+                                {
+                                    var Weekdaly = _context.WeeklyTimeTables
+                                                       .Include(w => w.Class)
+                                                       .Include(w => w.Course)
+                                                       .Include(w => w.Rooms)
+                                                       .Include(w => w.Teachers)
+                                                       .Include(w => w.TimeSlot)
+                                                       .Where(w => w.LearnDate == viewDate &&
+                                                                  w.RoomsId == rooms[i - 1].RoomsId &&
+                                                                  w.TimeSlotId == slots[j - 1].TimeSlotId &&
+                                                                  (t != null ? w.TeachersId == t.TeacherId : w.TeachersId != null))
+                                                       .OrderBy(w => w.LearnDate)
+                                                       .Skip((CurrentPage - 1) * PageSize).Take(PageSize)
+                                                       .FirstOrDefault();
+                                    if (Weekdaly != null)
+                                    {
+                                        WeeklyTable[i, j] = $"{Weekdaly.Class.ClassName}\\{Weekdaly.Course.CourseCode}\\{Weekdaly.Teachers.TeachersCode}";
+                                        WeeklyTimeTable.Add(Weekdaly);
+                                    }
+                                    else
+                                        WeeklyTable[i, j] = "-";
+                                }
                         }
                     }
-                }
 
-                return Page();
+                    return Page();
+                }
+                else
+                    return Redirect("/Index");
             }
             else
                 return Redirect("/Index");

@@ -35,6 +35,9 @@ namespace PRN211_Project.Pages.Teachers
         [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 1;
 
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; } = default;
+
         public async Task<IActionResult> OnGetAsync(int pageIndex)
         {
             if (_httpContext.HttpContext!.Session.GetString("Account") != null)
@@ -46,12 +49,20 @@ namespace PRN211_Project.Pages.Teachers
                 }
                 else
                 {
-                    TotalPages = (int)Math.Ceiling((double)_context.Teachers.Count() / PageSize);
+                    var teachers = _context.Teachers.Include(t => t.Account)
+                                                    .Where(t=> (Search==null || t.FullName.ToLower().Contains(Search.ToLower()) ||
+                                                                t.TeachersCode.ToLower().Contains(Search.ToLower()) ||
+                                                                t.Phone.Contains(Search) ||
+                                                                t.Address.ToLower().Contains(Search.ToLower()) ||
+                                                                t.Account.Email.ToLower().Contains(Search.ToLower()))).ToList();
+
+                    TotalPages = (int)Math.Ceiling((double)teachers.Count() / PageSize);
 
                     CurrentPage = Math.Max(1, Math.Min(PageIndex, TotalPages));
 
-                    Teacher = await _context.Teachers.Include(t => t.Account)
-                                                         .Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToListAsync();
+                    Teacher = teachers.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+
+                    ViewData["Search"] = Search;
                     return Page();
                 }
             }

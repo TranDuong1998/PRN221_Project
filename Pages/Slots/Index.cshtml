@@ -10,50 +10,52 @@
     <a asp-page="Create"><button class="btn btn-primary" type="button">Create New</button> </a>
 </p>
 
-<div class="container bg-light text-black rounded">
-    <table class="table table-fixed">
-        <thead>
-            <tr>
-                <th scope="col" class="text-center">
-                    .No
-                </th>
-                <th scope="col" class="text-center">
-                    Start Time
-                </th>
-                <th scope="col" class="text-center">
-                    End Time
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.TimeSlot[0].Description)
-                </th>
-                <th scope="col" class="text-center">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.TimeSlot)
-            {
+<div class="bg-light text-black rounded mb-3">
+    <div class="table-wrapper">
+        <table class="table" id="scroll-table">
+            <thead>
                 <tr>
-                    <td scope="row" class="text-center">
-                        @(Model.TimeSlot.IndexOf(item) + 1)
-                    </td>
-                    <td scope="row" class="text-center col-2">
-                        @item.StartTime?.ToString("hh\\:mm")
-                    </td>
-                    <td scope="row" class="text-center col-2">
-                        @item.EndTime?.ToString("hh\\:mm")
-                    </td>
-                    <td scope="row" class="col-7 text-break">
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td scope="row" class="text-center col-2">
-                        <a asp-page="./Edit" asp-route-id="@item.TimeSlotId" class="text-primary"><i class="fas fa-edit"></i></a> |
-                        <a asp-page="./Details" asp-route-id="@item.TimeSlotId" class="text-primary"><i class="fas fa-info-circle"></i></a> |
-                        <a asp-page="./Delete" asp-route-id="@item.TimeSlotId" class="text-danger"><i class="far fa-trash-alt"></i></a>
-                    </td>
+                    <th scope="col" class="text-center">
+                        .No
+                    </th>
+                    <th scope="col" class="text-center">
+                        Start Time
+                    </th>
+                    <th scope="col" class="text-center">
+                        End Time
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.TimeSlot[0].Description)
+                    </th>
+                    <th scope="col" class="text-center">Action</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TimeSlot)
+                {
+                    <tr>
+                        <td scope="row" class="text-center">
+                            @(Model.TimeSlot.IndexOf(item) + 1)
+                        </td>
+                        <td scope="row" class="text-center col-2">
+                            @item.StartTime?.ToString("hh\\:mm")
+                        </td>
+                        <td scope="row" class="text-center col-2">
+                            @item.EndTime?.ToString("hh\\:mm")
+                        </td>
+                        <td scope="row" class="col-7 text-break">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td scope="row" class="text-center col-2">
+                            <a asp-page="./Edit" asp-route-id="@item.TimeSlotId" class="text-primary"><i class="fas fa-edit"></i></a> |
+                            <a asp-page="./Details" asp-route-id="@item.TimeSlotId" class="text-primary"><i class="fas fa-info-circle"></i></a> |
+                            <a asp-page="./Delete" asp-route-id="@item.TimeSlotId" class="text-danger"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 <div>
     <vc:pagin page-url="./index" total-page="@Model.TotalPages" display-range="5"

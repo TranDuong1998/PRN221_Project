@@ -68,6 +68,15 @@ namespace PRN211_Project.Pages.Teachers
             if (teacher != null)
             {
                 Teacher = teacher;
+
+                var tclass = _context.TeacherClasses.Where(t=> t.TeacherId == id).ToList();
+                var tcourse = _context.TeacherDetails.Where(t=> t.TeacherId == id).ToList();
+                var w = _context.WeeklyTimeTables.Where(t=> t.TeachersId == id).ToList();
+
+                _context.TeacherClasses.RemoveRange(tclass);
+                _context.TeacherDetails.RemoveRange(tcourse);
+                _context.WeeklyTimeTables.RemoveRange(w);
+                await _context.SaveChangesAsync();
                 _context.Teachers.Remove(Teacher);
                 await _context.SaveChangesAsync();
             }

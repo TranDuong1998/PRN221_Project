@@ -1,0 +1,80 @@
+﻿@page
+@model PRN211_Project.Pages.Schedules.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<body onload="@((Model.CheckValidDate) ? "" : $"showNotFoundModal('{Model.Message}')")">
+    <h1 class=" text-white mt-3">Schedule Management</h1>
+    <div class="bg-light text-black justify-content-center row rounded">
+        <div class="py-2">
+            <h4>Schedule</h4>
+            <hr />
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="WeeklyTimeTable.Id" />
+                        <div class="d-flex row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-2">
+                                    <label asp-for="WeeklyTimeTable.RoomsId" class="control-label">Rooms</label>
+                                    <select asp-for="WeeklyTimeTable.RoomsId" class="form-control form-select" asp-items="ViewBag.RoomsId"></select>
+                                    <span asp-validation-for="WeeklyTimeTable.RoomsId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label asp-for="WeeklyTimeTable.TeachersId" class="control-label">Teacher</label>
+                                    <select asp-for="WeeklyTimeTable.TeachersId" disabled type="text" class="form-control" asp-items="ViewBag.TeachersId"></select>
+                                    <span asp-validation-for="WeeklyTimeTable.TeachersId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label asp-for="WeeklyTimeTable.CourseId" class="control-label">Course</label>
+                                    <select asp-for="WeeklyTimeTable.CourseId" disabled type="text" class="form-control" asp-items="ViewBag.CourseId"></select>
+                                    <span asp-validation-for="WeeklyTimeTable.CourseId" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-2">
+                                    <label asp-for="WeeklyTimeTable.TimeSlotId" class="control-label">TimeSlot</label>
+                                    <select asp-for="WeeklyTimeTable.TimeSlotId" class="form-control form-select" asp-items="ViewBag.TimeSlotId"></select>
+                                    <span asp-validation-for="WeeklyTimeTable.TimeSlotId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label asp-for="WeeklyTimeTable.ClassId" class="control-label">Class</label>
+                                    <select asp-for="WeeklyTimeTable.ClassId" disabled type="text" class="form-control" asp-items="ViewBag.ClassId"></select>
+                                    <span asp-validation-for="WeeklyTimeTable.ClassId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label asp-for="WeeklyTimeTable.LearnDate" class="control-label">Date</label>
+                                    <input asp-for="WeeklyTimeTable.LearnDate" type="date" class="form-control" />
+                                    <span asp-validation-for="WeeklyTimeTable.LearnDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label asp-for="WeeklyTimeTable.Description" class="control-label"></label>
+                                <input asp-for="WeeklyTimeTable.Description" class="form-control" />
+                                <span asp-validation-for="WeeklyTimeTable.Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex row justify-content-center mb-2">
+                            <div class="col-lg-3 row">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <a asp-page="./Index"><i class="fas fa-arrow-left"></i> Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
