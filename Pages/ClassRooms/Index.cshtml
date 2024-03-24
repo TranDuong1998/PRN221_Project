@@ -11,44 +11,48 @@
     <a asp-page="Create"><button class="btn btn-primary" type="button">Create New</button></a>
 </p>
 
-<div class="container bg-light text-black rounded">
-    <table class="table table-fixed">
-        <thead>
-            <tr> <th scope="col" class="text-center">
-                    .No
-                </th>
-                <th scope="col">
-                   Class Name
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.ClassRoom[0].Description)
-                </th>
-                <th scope="col" class="text-center">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.ClassRoom)
-            {
-                <tr><td scope="row" class="text-center col-1">
-                        @(Model.ClassRoom.IndexOf(item) + 1)
-                    </td>
-                    <td scope="row" class="col-3">
-                        @Html.DisplayFor(modelItem => item.ClassName)
-                    </td>
-                    <td scope="row" class="col-6">
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td scope="row" class="text-center col-2">
-                        <a asp-page="./Edit" asp-route-id="@item.ClassId"class="text-primary"><i class="fas fa-edit"></i></a> |
-                        <a asp-page="./Details" asp-route-id="@item.ClassId"class="text-primary"><i class="fas fa-info-circle"></i></a> |
-                        <a asp-page="./Delete" asp-route-id="@item.ClassId"class="text-danger"><i class="far fa-trash-alt"></i></a>
-                    </td>
+<div class="bg-light text-black rounded mb-3">
+    <div class="table-wrapper">
+        <table class="table table-fixed overflow-auto" id="scroll-table">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center">
+                        .No
+                    </th>
+                    <th scope="col">
+                        Class Name
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.ClassRoom[0].Description)
+                    </th>
+                    <th scope="col" class="text-center">Action</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ClassRoom)
+                {
+                    <tr>
+                        <td scope="row" class="text-center col-1">
+                            @(Model.ClassRoom.IndexOf(item) + 1)
+                        </td>
+                        <td scope="row" class="col-3">
+                            @Html.DisplayFor(modelItem => item.ClassName)
+                        </td>
+                        <td scope="row" class="col-6">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td scope="row" class="text-center col-2">
+                            <a asp-page="./Edit" asp-route-id="@item.ClassId" class="text-primary"><i class="fas fa-edit"></i></a> |
+                            <a asp-page="./Details" asp-route-id="@item.ClassId" class="text-primary"><i class="fas fa-info-circle"></i></a> |
+                            <a asp-page="./Delete" asp-route-id="@item.ClassId" class="text-danger"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 <div>
     <vc:pagin page-url="./index" total-page="@Model.TotalPages" display-range="5"
-              current-page="@Model.CurrentPage" page-index="1" filter="" search="" view-date=""></vc:pagin>
+              current-page="@Model.CurrentPage" page-index="1" filter="" search="@Model.Search" view-date=""></vc:pagin>
 </div>

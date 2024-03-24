@@ -33,6 +33,9 @@ namespace PRN211_Project.Pages.Courses
         [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 1;
 
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; } = default;
+
         public async Task<IActionResult> OnGetAsync(int pageIndex)
         {
             if (_httpContext.HttpContext!.Session.GetString("Account") != null)
@@ -44,12 +47,15 @@ namespace PRN211_Project.Pages.Courses
                 }
                 else
                 {
-                    TotalPages = (int)Math.Ceiling((double)_context.Teachers.Count() / PageSize);
+                    var courses = await _context.Courses.Where(c=> (Search==null || c.CourseCode.ToLower().Contains(Search.ToLower()) ||
+                                                                    c.CourseName.ToLower().Contains(Search.ToLower()))).ToListAsync();
+                    TotalPages = (int)Math.Ceiling((double)courses.Count() / PageSize);
 
                     CurrentPage = Math.Max(1, Math.Min(PageIndex, TotalPages));
 
-                    Course = await _context.Courses.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToListAsync();
+                    Course = courses.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
 
+                    ViewData["Search"] = Search;
                     return Page();
                 }
             }

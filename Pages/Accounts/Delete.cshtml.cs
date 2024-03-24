@@ -68,7 +68,21 @@ namespace PRN211_Project.Pages.Accounts
             if (account != null)
             {
                 Account = account;
-                if(_accountServices.DeleteAccount(account)>0)
+                var teacher = _context.Teachers.Where(t => t.AccountId == id).FirstOrDefault();
+                if (teacher != null)
+                {
+                    var tc = _context.TeacherClasses.Where(t => t.TeacherId == teacher.TeacherId).ToList();
+                    var td = _context.TeacherDetails.Where(t => t.TeacherId == teacher.TeacherId).ToList();
+                    var w = _context.WeeklyTimeTables.Where(t => t.TeachersId == teacher.TeacherId).ToList();
+
+                    _context.TeacherClasses.RemoveRange(tc);
+                    _context.TeacherDetails.RemoveRange(td);
+                    _context.WeeklyTimeTables.RemoveRange(w);
+                    await _context.SaveChangesAsync();
+                    _context.Teachers.Remove(teacher);
+                    _context.SaveChanges();
+                }
+                if (_accountServices.DeleteAccount(account) > 0)
                     return RedirectToPage("./Index");
                 else
                     return NotFound();

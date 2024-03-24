@@ -1,0 +1,46 @@
+﻿@page
+@model PRN211_Project.Pages.TeacherInClass.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>.No</th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeacherClass[0].Class)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeacherClass[0].Teacher)
+            </th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TeacherClass)
+        {
+            <tr>
+                <th></th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Class.ClassName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Teacher.TeachersCode)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

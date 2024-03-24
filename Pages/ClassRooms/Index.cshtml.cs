@@ -26,7 +26,7 @@ namespace PRN211_Project.Pages.ClassRooms
 
         public IList<ClassRoom> ClassRoom { get; set; } = default!;
 
-        private int PageSize = 5;
+        private int PageSize = 10;
         public int TotalPages { get; set; }
 
         [BindProperty(SupportsGet = true)]
@@ -35,6 +35,8 @@ namespace PRN211_Project.Pages.ClassRooms
         [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 1;
 
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; } = default;
         public async Task<IActionResult> OnGetAsync(int pageIndex)
         {
             if (_httpContext.HttpContext!.Session.GetString("Account") != null)
@@ -46,12 +48,15 @@ namespace PRN211_Project.Pages.ClassRooms
                 }
                 else
                 {
-                    TotalPages = (int)Math.Ceiling((double)_context.ClassRooms.Count() / PageSize);
+                    var classes = _context.ClassRooms.Where(c => (Search == null || c.ClassName.ToLower().Contains(Search.ToLower()))).ToList();
+
+                    TotalPages = (int)Math.Ceiling((double)classes.Count() / PageSize);
 
                     CurrentPage = Math.Max(1, Math.Min(PageIndex, TotalPages));
 
-                    ClassRoom = _context.ClassRooms.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+                    ClassRoom = classes.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
 
+                    ViewData["Search"] = Search;
                     return Page();
                 }
             }

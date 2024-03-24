@@ -1,0 +1,47 @@
+﻿@page
+@model PRN211_Project.Pages.TeacherInCourses.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class=" text-white">Course Management</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<div class="container bg-light text-black rounded">
+    <div class="container py-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TeacherDetail[0].Course)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TeacherDetail[0].Teacher)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TeacherDetail)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Course.CourseCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Teacher.TeachersCode)
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.Id" class="text-primary"><i class="fas fa-edit"></i></a> |
+                            <a asp-page="./Details" asp-route-id="@item.Id" class="text-primary"><i class="fas fa-info-circle"></i></a> |
+                            <a asp-page="./Delete" asp-route-id="@item.Id" class="text-danger"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -8,70 +8,73 @@
 <p>
     <a asp-page="Create"><button class="btn btn-primary" type="button">Create New</button></a>
 </p>
-<div class="bg-light text-black rounded">
-    <table class="table table-fixed">
-        <thead>
-            <tr>
-                <th scope="col" class="text-center">
-                    .No
-                </th>
-                <th scope="col">
-                    Code
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.Teacher[0].FullName)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.Teacher[0].Account.Email)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.Teacher[0].Address)
-                </th scope="col">
-                <th scope="col" class="text-center">
-                    @Html.DisplayNameFor(model => model.Teacher[0].Phone)
-                </th>
-                <th scope="col" class="text-center">
-                    @Html.DisplayNameFor(model => model.Teacher[0].Dob)
-                </th>
-
-                <th scope="col" class="text-center">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Teacher)
-            {
+<div class="bg-light text-black rounded mb-3">
+    <div class="table-wrapper">
+        <table class="table align-middle table-bordered overflow-auto" id="scroll-table">
+            <thead>
                 <tr>
-                    <td scope="row" class="text-center">
-                        @(Model.Teacher.IndexOf(item) + 1)
-                    </td>
-                    <td scope="row" class="col-1">
-                        @Html.DisplayFor(modelItem => item.TeachersCode)
-                    </td>
-                    <td scope="row" class="col-2">
-                        @Html.DisplayFor(modelItem => item.FullName)
-                    </td>
-                    <td scope="row" class="text-break col-2">
-                        @Html.DisplayFor(modelItem => item.Account.Email)
-                    </td>
-                    <td scope="row" class="text-break col-4">
-                        @Html.DisplayFor(modelItem => item.Address)
-                    </td>
-                    <td scope="row" class="text-center col-1">
-                        @Html.DisplayFor(modelItem => item.Phone)
-                    </td>
-                    <td scope="row" class="text-center col-1">
-                        @(item.Dob==null ? "" : item.Dob.Value.ToString("dd/MM/yyyy"))
-                    </td>
+                    <th scope="col" class="text-center">
+                        .No
+                    </th>
+                    <th scope="col">
+                        Code
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.Teacher[0].FullName)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.Teacher[0].Account.Email)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.Teacher[0].Address)
+                    </th scope="col">
+                    <th scope="col" class="text-center">
+                        @Html.DisplayNameFor(model => model.Teacher[0].Phone)
+                    </th>
+                    <th scope="col" class="text-center">
+                        @Html.DisplayNameFor(model => model.Teacher[0].Dob)
+                    </th>
 
-                    <td scope="row" class="text-center col-2">
-                        <a asp-page="./Edit" asp-route-id="@item.TeacherId"class="text-primary"><i class="fas fa-edit"></i></a> |
-                        <a asp-page="./Details" asp-route-id="@item.TeacherId" class="text-primary"><i class="fas fa-info-circle"></i></a> |
-                        <a asp-page="./Delete" asp-route-id="@item.TeacherId" class="text-danger"><i class="far fa-trash-alt"></i></a>
-                    </td>
+                    <th scope="col" class="text-center">Action</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Teacher)
+                {
+                    <tr>
+                        <td scope="row" class="text-center">
+                            @(Model.Teacher.IndexOf(item) + 1)
+                        </td>
+                        <td scope="row" class="col-1">
+                            @Html.DisplayFor(modelItem => item.TeachersCode)
+                        </td>
+                        <td scope="row" class="col-2">
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td scope="row" class="text-break col-2">
+                            @Html.DisplayFor(modelItem => item.Account.Email)
+                        </td>
+                        <td scope="row" class="text-break col-4">
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td scope="row" class="text-center col-1">
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td scope="row" class="text-center col-1">
+                            @(item.Dob==null ? "" : item.Dob.Value.ToString("dd/MM/yyyy"))
+                        </td>
+
+                        <td scope="row" class="text-center col-2">
+                            <a asp-page="./Edit" asp-route-id="@item.TeacherId"class="text-primary"><i class="fas fa-edit"></i></a> |
+                            <a asp-page="./Details" asp-route-id="@item.TeacherId" class="text-primary"><i class="fas fa-info-circle"></i></a> |
+                            <a asp-page="/TeacherInCourses/Details" asp-route-id="@item.TeacherId" class="text-primary"><i class="far fa-clipboard"></i></a> |
+                            <a asp-page="./Delete" asp-route-id="@item.TeacherId" class="text-danger"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 <div><vc:pagin page-url="./index" total-page="@Model.TotalPages" display-range="5"
-              current-page="@Model.CurrentPage" page-index="1" filter="" search="" view-date=""></vc:pagin></div>
+              current-page="@Model.CurrentPage" page-index="1" filter="" search="@Model.Search" view-date=""></vc:pagin></div>

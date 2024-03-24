@@ -33,6 +33,9 @@ namespace PRN211_Project.Pages.Accounts
         [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 1;
 
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; } = default;
+
         public async Task<IActionResult> OnGetAsync(int pageIndex)
         {
             if (_httpContext.HttpContext!.Session.GetString("Account") != null)
@@ -44,13 +47,17 @@ namespace PRN211_Project.Pages.Accounts
                 }
                 else
                 {
-                    TotalPages = (int)Math.Ceiling((double)_context.Accounts.Count() / PageSize);
+                    var accs = _context.Accounts.Where(a => a.AccountId != 1 &&
+                                                (Search == null || a.Email.ToLower().Contains(Search.ToLower()) ||
+                                                                   a.UserName.ToLower().Contains(Search.ToLower())))
+                                               .ToList();
+
+                    TotalPages = (int)Math.Ceiling((double)accs.Count() / PageSize);
 
                     CurrentPage = Math.Max(1, Math.Min(PageIndex, TotalPages));
 
-                    Account = _context.Accounts.Where(a => a.AccountId != 1)
-                                               .Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
-
+                    Account = accs.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+                    ViewData["Search"] = Search;
                     return Page();
                 }
             }

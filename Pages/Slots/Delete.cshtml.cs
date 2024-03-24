@@ -68,6 +68,11 @@ namespace PRN211_Project.Pages.Slots
             if (timeslot != null)
             {
                 TimeSlot = timeslot;
+
+                var w = _context.WeeklyTimeTables.Where(t => t.TimeSlotId==TimeSlot.TimeSlotId).ToList();
+
+                _context.WeeklyTimeTables.RemoveRange(w);
+                await _context.SaveChangesAsync();
                 _context.TimeSlots.Remove(TimeSlot);
                 await _context.SaveChangesAsync();
             }

@@ -69,6 +69,13 @@ namespace PRN211_Project.Pages.ClassRooms
             if (classroom != null)
             {
                 ClassRoom = classroom;
+
+                var ct = _context.TeacherClasses.Where(c => c.ClassId == ClassRoom.ClassId).ToList();
+                var w = _context.WeeklyTimeTables.Where(c => c.ClassId == ClassRoom.ClassId).ToList();
+
+                _context.TeacherClasses.RemoveRange(ct);
+                _context.WeeklyTimeTables.RemoveRange(w);
+                await _context.SaveChangesAsync();
                 _context.ClassRooms.Remove(ClassRoom);
                 await _context.SaveChangesAsync();
             }

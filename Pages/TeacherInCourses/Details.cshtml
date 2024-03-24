@@ -1,0 +1,40 @@
+﻿@page "{cId:int?}/{teacherId:int?}"
+@model PRN211_Project.Pages.TeacherInCourses.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 class="text-white mt-2">Details</h1>
+
+<div class="container bg-light rounded">
+    <h4 class="py-2">TeacherDetail</h4>
+    <hr />
+    @if (Model.TeacherDetail != null)
+    {
+        @foreach (var item in Model.TeacherDetail)
+        {
+            <dl class="row">
+                <dt class="col-sm-2">
+                    Course
+                </dt>
+                <dd class="col-sm-10">
+                    @(item.Course.CourseCode == null ? "No info" : item.Course.CourseCode)
+                </dd>
+                <dt class="col-sm-2">
+                    Teacher
+                </dt>
+                <dd class="col-sm-10">
+                    @(item.Teacher.TeachersCode == null ? "No info" : item.Teacher.TeachersCode)
+                </dd>
+                <dt class="col-sm-2">
+                    <a asp-page="./Edit" asp-route-id="@item?.Id">Edit</a>
+                </dt>
+            </dl>
+        }
+        <div>
+            <a asp-page="./Index"><i class="fas fa-arrow-left"></i> Back to List</a>
+        </div>
+    }
+</div>
+

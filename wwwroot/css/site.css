@@ -151,3 +151,15 @@ input:focus {
     text-overflow: ellipsis;
     white-space: normal;
 }
+
+thead {
+    position: sticky;
+    top: 0px;
+    background-color: royalblue;
+}
+
+.table-wrapper {
+    max-height: 350px;
+    overflow-y: scroll;
+    border-radius: 5px;
+}
