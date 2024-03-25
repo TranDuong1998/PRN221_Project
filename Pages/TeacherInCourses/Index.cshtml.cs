@@ -6,28 +6,41 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PRN211_Project.Models;
+using PRN211_Project.Services;
 
 namespace PRN211_Project.Pages.TeacherInCourses
 {
     public class IndexModel : PageModel
     {
         private readonly PRN211_Project.Models.Prn211ProjectContext _context;
-
-        public IndexModel(PRN211_Project.Models.Prn211ProjectContext context)
+        private IHttpContextAccessor _httpContext;
+        private GetSession session = new GetSession();
+        public IndexModel(Prn211ProjectContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
         public IList<TeacherDetail> TeacherDetail { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (_context.TeacherDetails != null)
+            if (_httpContext.HttpContext!.Session.GetString("Account") != null)
             {
-                TeacherDetail = await _context.TeacherDetails
-                .Include(t => t.Course)
-                .Include(t => t.Teacher).ToListAsync();
+                var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
+                if (!account.Role.ToLower().Equals("admin"))
+                {
+                    return Redirect("/Index");
+                }
+                else
+                {
+                    TeacherDetail = await _context.TeacherDetails
+                  .Include(t => t.Course)
+                  .Include(t => t.Teacher).ToListAsync(); 
+                    return Page();
+                }
             }
+            return Redirect("/Index");
         }
     }
 }

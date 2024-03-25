@@ -5,9 +5,17 @@
     ViewData["Title"] = "Teacher Management";
 }
 <h1 class=" text-white">Teacher Management</h1>
-<p>
-    <a asp-page="Create"><button class="btn btn-primary" type="button">Create New</button></a>
-</p>
+<div class="mb-3 row d-flex">
+    <div class="col-lg-2">
+        <a asp-page="Create"><button class="btn btn-primary" type="button">New Lecturer</button></a>
+    </div>
+    <div class="col-lg-3">
+        <a asp-page="/TeacherInClass/Create"><button class="btn btn-primary" type="button">New Classroom Instructor</button></a>
+    </div>
+    <div class="col-lg-3">
+        <a asp-page="/TeacherInCourses/Create"><button class="btn btn-primary" type="button">New Subject lecturer</button></a>
+    </div>
+</div>
 <div class="bg-light text-black rounded mb-3">
     <div class="table-wrapper">
         <table class="table align-middle table-bordered overflow-auto" id="scroll-table">
@@ -20,21 +28,17 @@
                         Code
                     </th>
                     <th scope="col">
-                        @Html.DisplayNameFor(model => model.Teacher[0].FullName)
+                        Full Name
                     </th>
                     <th scope="col">
-                        @Html.DisplayNameFor(model => model.Teacher[0].Account.Email)
+                        Email
                     </th>
                     <th scope="col">
-                        @Html.DisplayNameFor(model => model.Teacher[0].Address)
+                        Address
                     </th scope="col">
                     <th scope="col" class="text-center">
-                        @Html.DisplayNameFor(model => model.Teacher[0].Phone)
+                        Phone
                     </th>
-                    <th scope="col" class="text-center">
-                        @Html.DisplayNameFor(model => model.Teacher[0].Dob)
-                    </th>
-
                     <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
@@ -46,28 +50,25 @@
                             @(Model.Teacher.IndexOf(item) + 1)
                         </td>
                         <td scope="row" class="col-1">
-                            @Html.DisplayFor(modelItem => item.TeachersCode)
+                            @item.TeachersCode
                         </td>
-                        <td scope="row" class="col-2">
-                            @Html.DisplayFor(modelItem => item.FullName)
+                        <td scope="row" class="col-lg-2">
+                           @item.FullName
                         </td>
-                        <td scope="row" class="text-break col-2">
-                            @Html.DisplayFor(modelItem => item.Account.Email)
+                        <td scope="row" class="text-break col-3">
+                            <p class="limitedText">@item.Account.Email</p>
                         </td>
-                        <td scope="row" class="text-break col-4">
-                            @Html.DisplayFor(modelItem => item.Address)
+                        <td scope="row" class="text-break col-3">
+                            <p class="limitedText">@item.Address</p>
                         </td>
                         <td scope="row" class="text-center col-1">
                             @Html.DisplayFor(modelItem => item.Phone)
                         </td>
-                        <td scope="row" class="text-center col-1">
-                            @(item.Dob==null ? "" : item.Dob.Value.ToString("dd/MM/yyyy"))
-                        </td>
-
                         <td scope="row" class="text-center col-2">
                             <a asp-page="./Edit" asp-route-id="@item.TeacherId"class="text-primary"><i class="fas fa-edit"></i></a> |
                             <a asp-page="./Details" asp-route-id="@item.TeacherId" class="text-primary"><i class="fas fa-info-circle"></i></a> |
-                            <a asp-page="/TeacherInCourses/Details" asp-route-id="@item.TeacherId" class="text-primary"><i class="far fa-clipboard"></i></a> |
+                            <a asp-page="/TeacherInCourses/Details" asp-route-teachId="@item.TeacherId" class="text-primary"><i class="fas fa-journal-whills"></i></a> |
+                            <a asp-page="/TeacherInClass/Details" asp-route-teachId="@item.TeacherId" class="text-primary"><i class="fas fa-house-user"></i></a> |
                             <a asp-page="./Delete" asp-route-id="@item.TeacherId" class="text-danger"><i class="far fa-trash-alt"></i></a>
                         </td>
                     </tr>

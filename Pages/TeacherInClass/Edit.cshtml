@@ -5,36 +5,44 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>TeacherClass</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TeacherClass.Id" />
-            <div class="form-group">
-                <label asp-for="TeacherClass.TeacherId" class="control-label"></label>
-                <select asp-for="TeacherClass.TeacherId" class="form-control" asp-items="ViewBag.TeacherId"></select>
-                <span asp-validation-for="TeacherClass.TeacherId" class="text-danger"></span>
+<body onload="@((Model.Status) ? $"showNotFoundModal('{Model.Message}')" : "")">
+    <h1 class=" text-white mt-2">Teacher Management</h1>
+    <div class="container bg-light text-black rounded">
+        <div class="container py-2">
+            <h4>TeacherClass</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="TeacherClass.Id" />
+                        <div class="form-group mb-2">
+                            <label asp-for="TeacherClass.TeacherId" class="control-label">Teacher</label>
+                            <select asp-for="TeacherClass.TeacherId" class="form-control" asp-items="ViewBag.TeacherId"></select>
+                            <span asp-validation-for="TeacherClass.TeacherId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label asp-for="TeacherClass.ClassId" class="control-label"></label>
+                            <select asp-for="TeacherClass.ClassId" class="form-control" asp-items="ViewBag.ClassId"></select>
+                            <span asp-validation-for="TeacherClass.ClassId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                    <div>
+                        <a asp-page="./Index"><i class="fas fa-arrow-left"></i> Back to List</a>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="TeacherClass.ClassId" class="control-label"></label>
-                <select asp-for="TeacherClass.ClassId" class="form-control" asp-items="ViewBag.ClassId"></select>
-                <span asp-validation-for="TeacherClass.ClassId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</body>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

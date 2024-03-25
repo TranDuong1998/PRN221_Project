@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PRN211_Project.Models;
+using PRN211_Project.Services;
 
 namespace PRN211_Project.Pages.TeacherInCourses
 {
@@ -13,32 +14,49 @@ namespace PRN211_Project.Pages.TeacherInCourses
     {
         private readonly PRN211_Project.Models.Prn211ProjectContext _context;
 
-        public DeleteModel(PRN211_Project.Models.Prn211ProjectContext context)
+        private IHttpContextAccessor _httpContext;
+        private GetSession session = new GetSession();
+
+        public DeleteModel(PRN211_Project.Models.Prn211ProjectContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
         [BindProperty]
-      public TeacherDetail TeacherDetail { get; set; } = default!;
+        public TeacherDetail TeacherDetail { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.TeacherDetails == null)
+            if (_httpContext.HttpContext!.Session.GetString("Account") != null)
             {
-                return NotFound();
-            }
+                var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
+                if (!account.Role.ToLower().Equals("admin"))
+                {
+                    return Redirect("/Index");
+                }
+                else
+                {
+                    if (id == null || _context.TeacherDetails == null)
+                    {
+                        return NotFound();
+                    }
 
-            var teacherdetail = await _context.TeacherDetails.FirstOrDefaultAsync(m => m.Id == id);
+                    var teacherdetail = await _context.TeacherDetails.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (teacherdetail == null)
-            {
-                return NotFound();
+                    if (teacherdetail == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        TeacherDetail = teacherdetail;
+                    }
+                    return Page();
+                }
             }
-            else 
-            {
-                TeacherDetail = teacherdetail;
-            }
-            return Page();
+            return Redirect("/Index");
+
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)

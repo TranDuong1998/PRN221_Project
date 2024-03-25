@@ -54,19 +54,19 @@ namespace PRN211_Project.Pages.Schedules
 
         public async Task<IActionResult> OnGet()
         {
-            //if (_httpContext.HttpContext!.Session.GetString("Account") != null)
-            //{
-            //    var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
-            //    if (!account.Role.ToLower().Equals("admin"))
-            //    {
-            //        return Redirect("/Index");
-            //    }
-            //    else
-            //    {
-            return Page();
-            //    }
-            //}
-            //return Redirect("/Index");
+            if (_httpContext.HttpContext!.Session.GetString("Account") != null)
+            {
+                var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
+                if (!account.Role.ToLower().Equals("admin"))
+                {
+                    return Redirect("/Index");
+                }
+                else
+                {
+                    return Page();
+                }
+            }
+            return Redirect("/Index");
 
         }
 
@@ -184,7 +184,7 @@ namespace PRN211_Project.Pages.Schedules
                     }
                     if (sub == null)
                     {
-                        err += "Course does not exists! ";
+                        err += "Subject does not exists! ";
                         count++;
                     }
                     if (tc == null)
