@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PRN211_Project.Models;
+using PRN211_Project.Services;
 
 namespace PRN211_Project.Pages.Schedules
 {
@@ -14,9 +15,13 @@ namespace PRN211_Project.Pages.Schedules
     {
         private readonly PRN211_Project.Models.Prn211ProjectContext _context;
 
-        public EditModel(PRN211_Project.Models.Prn211ProjectContext context)
+        private IHttpContextAccessor _httpContext;
+        private GetSession session = new GetSession();
+
+        public EditModel(PRN211_Project.Models.Prn211ProjectContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
         [BindProperty]
@@ -28,19 +33,31 @@ namespace PRN211_Project.Pages.Schedules
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.WeeklyTimeTables == null)
+            if (_httpContext.HttpContext!.Session.GetString("Account") != null)
             {
-                return NotFound();
+                var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
+                if (!account.Role.ToLower().Equals("admin"))
+                {
+                    return Redirect("/Index");
+                }
+                else
+                {
+                    if (id == null || _context.WeeklyTimeTables == null)
+                    {
+                        return NotFound();
+                    }
+
+                    if (LoadData(id) == null)
+                    {
+                        return NotFound();
+                    }
+
+                    WeeklyTimeTable = LoadData(id);
+
+                    return Page();
+                }
             }
-
-            if (LoadData(id) == null)
-            {
-                return NotFound();
-            }
-
-            WeeklyTimeTable = LoadData(id);
-
-            return Page();
+            return Redirect("/Index");
         }
 
         public WeeklyTimeTable LoadData(int? id)

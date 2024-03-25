@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PRN211_Project.Models;
+using PRN211_Project.Services;
 
 namespace PRN211_Project.Pages.TeacherInClass
 {
@@ -14,29 +15,48 @@ namespace PRN211_Project.Pages.TeacherInClass
     {
         private readonly PRN211_Project.Models.Prn211ProjectContext _context;
 
-        public EditModel(PRN211_Project.Models.Prn211ProjectContext context)
+        private IHttpContextAccessor _httpContext;
+        private GetSession session = new GetSession();
+
+        public EditModel(PRN211_Project.Models.Prn211ProjectContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
         [BindProperty]
         public TeacherClass TeacherClass { get; set; } = default!;
 
+        public string Message;
+        public bool Status = false;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.TeacherClasses == null)
+            if (_httpContext.HttpContext!.Session.GetString("Account") != null)
             {
-                return NotFound();
-            }
+                var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
+                if (!account.Role.ToLower().Equals("admin"))
+                {
+                    return Redirect("/Index");
+                }
+                else
+                {
+                    if (id == null || _context.TeacherClasses == null)
+                    {
+                        return NotFound();
+                    }
 
-            var teacherclass = LoadData(id);
-            if (teacherclass == null)
-            {
-                return NotFound();
-            }
-            TeacherClass = teacherclass;
+                    var teacherclass = LoadData(id);
+                    if (teacherclass == null)
+                    {
+                        return NotFound();
+                    }
+                    TeacherClass = teacherclass;
 
-            return Page();
+                    return Page();
+                }
+            }
+            return Redirect("/Index");
+
         }
 
         public TeacherClass LoadData(int? id)
@@ -45,7 +65,7 @@ namespace PRN211_Project.Pages.TeacherInClass
             var classes = _context.ClassRooms.ToList();
 
             ViewData["ClassId"] = classes.Select(c => new SelectListItem { Value = c.ClassId.ToString(), Text = c.ClassName }).ToList();
-            ViewData["TeachersId"] = teachers.Select(t => new SelectListItem { Value = t.TeacherId.ToString(), Text = t.TeachersCode }).ToList();
+            ViewData["TeacherId"] = teachers.Select(t => new SelectListItem { Value = t.TeacherId.ToString(), Text = t.TeachersCode }).ToList();
             var teacherclass = _context.TeacherClasses.FirstOrDefault(m => m.Id == id);
             return teacherclass;
         }
@@ -58,7 +78,7 @@ namespace PRN211_Project.Pages.TeacherInClass
             {
                 return Page();
             }
-            
+
             _context.Attach(TeacherClass).State = EntityState.Modified;
 
             try

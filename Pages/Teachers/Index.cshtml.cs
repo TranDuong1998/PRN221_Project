@@ -50,7 +50,7 @@ namespace PRN211_Project.Pages.Teachers
                 else
                 {
                     var teachers = _context.Teachers.Include(t => t.Account)
-                                                    .Where(t=> (Search==null || t.FullName.ToLower().Contains(Search.ToLower()) ||
+                                                    .Where(t => (Search == null || t.FullName.ToLower().Contains(Search.ToLower()) ||
                                                                 t.TeachersCode.ToLower().Contains(Search.ToLower()) ||
                                                                 t.Phone.Contains(Search) ||
                                                                 t.Address.ToLower().Contains(Search.ToLower()) ||

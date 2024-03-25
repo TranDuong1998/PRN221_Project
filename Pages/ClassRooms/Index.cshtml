@@ -7,9 +7,14 @@
 
 <h1 class=" text-white">Classroom Management</h1>
 
-<p>
-    <a asp-page="Create"><button class="btn btn-primary" type="button">Create New</button></a>
-</p>
+<div class="mb-3 row d-flex">
+    <div class="col-lg-2">
+        <a asp-page="Create"><button class="btn btn-primary" type="button">New Class</button></a>
+    </div>
+    <div class="col-lg-3">
+        <a asp-page="/TeacherInClass/Create"><button class="btn btn-primary" type="button">New Classroom Instructor</button></a>
+    </div>
+</div>
 
 <div class="bg-light text-black rounded mb-3">
     <div class="table-wrapper">
@@ -44,6 +49,7 @@
                         <td scope="row" class="text-center col-2">
                             <a asp-page="./Edit" asp-route-id="@item.ClassId" class="text-primary"><i class="fas fa-edit"></i></a> |
                             <a asp-page="./Details" asp-route-id="@item.ClassId" class="text-primary"><i class="fas fa-info-circle"></i></a> |
+                            <a asp-page="/TeacherInClass/Details" asp-route-classId="@item.ClassId" class="text-primary"><i class="far fa-clipboard"></i></a> |
                             <a asp-page="./Delete" asp-route-id="@item.ClassId" class="text-danger"><i class="far fa-trash-alt"></i></a>
                         </td>
                     </tr>

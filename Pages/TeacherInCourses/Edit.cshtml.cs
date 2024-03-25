@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PRN211_Project.Models;
+using PRN211_Project.Services;
 
 namespace PRN211_Project.Pages.TeacherInCourses
 {
     public class EditModel : PageModel
     {
         private readonly PRN211_Project.Models.Prn211ProjectContext _context;
-
-        public EditModel(PRN211_Project.Models.Prn211ProjectContext context)
+        private IHttpContextAccessor _httpContext;
+        private GetSession session = new GetSession();
+        public EditModel(Prn211ProjectContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
         [BindProperty]
@@ -34,20 +37,33 @@ namespace PRN211_Project.Pages.TeacherInCourses
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.TeacherDetails == null)
+            if (_httpContext.HttpContext!.Session.GetString("Account") != null)
             {
-                return NotFound();
-            }
+                var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
+                if (!account.Role.ToLower().Equals("admin"))
+                {
+                    return Redirect("/Index");
+                }
+                else
+                {
+                    if (id == null || _context.TeacherDetails == null)
+                    {
+                        return NotFound();
+                    }
 
-            var teacherdetail =  await _context.TeacherDetails.Include(t => t.Teacher)
-                                                             .Include(t => t.Course).FirstOrDefaultAsync(m => m.Id == id);
-            if (teacherdetail == null)
-            {
-                return NotFound();
+                    var teacherdetail = await _context.TeacherDetails.Include(t => t.Teacher)
+                                                                     .Include(t => t.Course).FirstOrDefaultAsync(m => m.Id == id);
+                    if (teacherdetail == null)
+                    {
+                        return NotFound();
+                    }
+                    TeacherDetail = teacherdetail;
+                    LoadData();
+                    return Page();
+                }
             }
-            TeacherDetail = teacherdetail;
-            LoadData();
-            return Page();
+            return Redirect("/Index");
+
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -82,7 +98,7 @@ namespace PRN211_Project.Pages.TeacherInCourses
 
         private bool TeacherDetailExists(int id)
         {
-          return (_context.TeacherDetails?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.TeacherDetails?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

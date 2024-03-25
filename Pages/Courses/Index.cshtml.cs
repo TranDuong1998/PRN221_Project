@@ -38,15 +38,15 @@ namespace PRN211_Project.Pages.Courses
 
         public async Task<IActionResult> OnGetAsync(int pageIndex)
         {
-            if (_httpContext.HttpContext!.Session.GetString("Account") != null)
-            {
-                var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
-                if (!account.Role.ToLower().Equals("admin"))
-                {
-                    return Redirect("/Index");
-                }
-                else
-                {
+            //if (_httpContext.HttpContext!.Session.GetString("Account") != null)
+            //{
+            //    var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
+            //    if (!account.Role.ToLower().Equals("admin"))
+            //    {
+            //        return Redirect("/Index");
+            //    }
+            //    else
+                //{
                     var courses = await _context.Courses.Where(c=> (Search==null || c.CourseCode.ToLower().Contains(Search.ToLower()) ||
                                                                     c.CourseName.ToLower().Contains(Search.ToLower()))).ToListAsync();
                     TotalPages = (int)Math.Ceiling((double)courses.Count() / PageSize);
@@ -57,10 +57,10 @@ namespace PRN211_Project.Pages.Courses
 
                     ViewData["Search"] = Search;
                     return Page();
-                }
-            }
-            else
-                return Redirect("/Index");
+                //}
+            //}
+            //else
+            //    return Redirect("/Index");
         }
     }
 }

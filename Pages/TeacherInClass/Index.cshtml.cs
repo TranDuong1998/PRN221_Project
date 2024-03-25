@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PRN211_Project.Models;
+using PRN211_Project.Services;
 
 namespace PRN211_Project.Pages.TeacherInClass
 {
@@ -13,21 +14,39 @@ namespace PRN211_Project.Pages.TeacherInClass
     {
         private readonly PRN211_Project.Models.Prn211ProjectContext _context;
 
-        public IndexModel(PRN211_Project.Models.Prn211ProjectContext context)
+        private IHttpContextAccessor _httpContext;
+        private GetSession session = new GetSession();
+
+        public IndexModel(PRN211_Project.Models.Prn211ProjectContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
-        public IList<TeacherClass> TeacherClass { get;set; } = default!;
+        public IList<TeacherClass> TeacherClass { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (_context.TeacherClasses != null)
+            if (_httpContext.HttpContext!.Session.GetString("Account") != null)
             {
-                TeacherClass = await _context.TeacherClasses
-                .Include(t => t.Class)
-                .Include(t => t.Teacher).ToListAsync();
+                var account = session.GetObject(_httpContext.HttpContext!.Session, "Account");
+                if (!account.Role.ToLower().Equals("admin"))
+                {
+                    return Redirect("/Index");
+                }
+                else
+                {
+                    if (_context.TeacherClasses != null)
+                    {
+                        TeacherClass = await _context.TeacherClasses
+                        .Include(t => t.Class)
+                        .Include(t => t.Teacher).ToListAsync();
+                    }
+                    return Page();
+                }
             }
+            return Redirect("/Index");
+
         }
     }
 }

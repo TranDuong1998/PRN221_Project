@@ -1,4 +1,4 @@
-﻿@page "{cId:int?}/{teacherId:int?}"
+﻿@page
 @model PRN211_Project.Pages.TeacherInCourses.DetailsModel
 
 @{
@@ -8,7 +8,7 @@
 <h1 class="text-white mt-2">Details</h1>
 
 <div class="container bg-light rounded">
-    <h4 class="py-2">TeacherDetail</h4>
+    <h4 class="py-2">Subject lecturer</h4>
     <hr />
     @if (Model.TeacherDetail != null)
     {
@@ -27,12 +27,13 @@
                 <dd class="col-sm-10">
                     @(item.Teacher.TeachersCode == null ? "No info" : item.Teacher.TeachersCode)
                 </dd>
-                <dt class="col-sm-2">
+                <dt class="col-sm-3 text-end">
                     <a asp-page="./Edit" asp-route-id="@item?.Id">Edit</a>
                 </dt>
             </dl>
         }
-        <div>
+        <div class="py-2 mb-3">
+            <a asp-page="@Model.Url"><i class="fas fa-arrow-left"></i> Back</a> |
             <a asp-page="./Index"><i class="fas fa-arrow-left"></i> Back to List</a>
         </div>
     }
